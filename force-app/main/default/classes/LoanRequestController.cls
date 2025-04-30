@@ -35,20 +35,18 @@ public with sharing class LoanRequestController {
     }
 
     @AuraEnabled
-public static Id createLoanRequestWithDetails(String loanType, Decimal amount, String userQuery, Decimal interestRate) {
-    if (String.isBlank(loanType) || amount == null || String.isBlank(userQuery) || interestRate == null) {
-        throw new AuraHandledException('All fields are required.');
+    public static Id createLoanRequestWithDetails(String loanType, Decimal amount, String userQuery, Decimal interestRate, String applicantName, String applicantEmail) {
+        Loan_Request__c newLoan = new Loan_Request__c();
+        newLoan.Loan_Type__c = loanType;
+        newLoan.Amount_Requested__c = amount;
+        newLoan.Interest_Rate__c = interestRate;
+        newLoan.User_Query__c = userQuery;
+        newLoan.Applicant_Name__c = applicantName;
+        newLoan.Applicant_Email__c = applicantEmail;
+        newLoan.Approval_Status__c = 'Pending';
+        
+        insert newLoan;
+        return newLoan.Id;
     }
 
-    Loan_Request__c loan = new Loan_Request__c(
-        Loan_Type__c = loanType,
-        Amount_Requested__c = amount,
-        User_Query__c = userQuery,
-        Interest_Rate__c = interestRate,
-        Approval_Status__c = 'Pending'
-    );
-
-    insert loan;
-    return loan.Id;
-}
 }

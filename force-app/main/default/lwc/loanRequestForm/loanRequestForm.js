@@ -7,6 +7,9 @@ export default class LoanRequestForm extends LightningElement {
     @track amount = '';
     @track interestRate = '';
     @track userQuery = '';
+    @track applicantName = '';
+    @track applicantEmail = '';
+
     @track recordId;
     @track success = false;
     @track error;
@@ -34,6 +37,15 @@ export default class LoanRequestForm extends LightningElement {
         this.userQuery = event.target.value;
     }
 
+    handleName(event) {
+        this.applicantName = event.target.value;
+    }
+    
+    handleEmail(event) {
+        this.applicantEmail = event.target.value;
+    }
+    
+
     handleSubmit() {
         // Validate input before making the Apex call
         if (!this.loanType || !this.amount || !this.interestRate || !this.userQuery) {
@@ -52,7 +64,9 @@ export default class LoanRequestForm extends LightningElement {
             loanType: this.loanType,
             amount: parseFloat(this.amount),
             userQuery: this.userQuery,
-            interestRate: parseFloat(this.interestRate)
+            interestRate: parseFloat(this.interestRate),
+            applicantName: this.applicantName,
+            applicantEmail: this.applicantEmail
         })
             .then(result => {
                 this.recordId = result;
@@ -62,12 +76,14 @@ export default class LoanRequestForm extends LightningElement {
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Success',
-                        message: 'Loan request submitted successfully! ID: ' + result,
+                        message: 'Your loan is now under approval and submitted successfully! ID: ' + result,
                         variant: 'success'
                     })
                 );
 
                 // Clear form after success
+                this.applicantName = '';
+                this.applicantEmail = '';
                 this.loanType = '';
                 this.amount = '';
                 this.interestRate = '';
@@ -90,7 +106,7 @@ export default class LoanRequestForm extends LightningElement {
 
                 this.dispatchEvent(
                     new ShowToastEvent({
-                        title: 'Error',
+                        title: 'Submission Failed',
                         message: message,
                         variant: 'error'
                     })

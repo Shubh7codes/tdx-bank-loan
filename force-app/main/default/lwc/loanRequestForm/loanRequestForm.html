@@ -28,6 +28,20 @@
                 onchange={handleRate}>
             </lightning-input>
 
+            <lightning-input 
+                type="text" 
+                label="Your Name" 
+                value={applicantName} 
+                onchange={handleName}>
+            </lightning-input>
+
+            <lightning-input 
+                type="email" 
+                label="Your Email" 
+                value={applicantEmail} 
+                onchange={handleEmail}>
+            </lightning-input>
+
             <lightning-button
                 variant="brand"
                 label="Submit Request"
